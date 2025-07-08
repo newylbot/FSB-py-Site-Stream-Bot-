@@ -1,17 +1,17 @@
 from os import environ as env
 
 class Telegram:
-    API_ID = int(env.get("TELEGRAM_API_ID", 12345))
-    API_HASH = env.get("TELEGRAM_API_HASH", "xyz")
-    OWNER_ID = int(env.get("OWNER_ID", 5530237028))
-    ALLOWED_USER_IDS = env.get("ALLOWED_USER_IDS", "").split()
-    BOT_USERNAME = env.get("TELEGRAM_BOT_USERNAME", "BotFather")
-    BOT_TOKEN = env.get("TELEGRAM_BOT_TOKEN", "1234567:xyz")
-    CHANNEL_ID = int(env.get("TELEGRAM_CHANNEL_ID", -100123456789))
-    SECRET_CODE_LENGTH = int(env.get("SECRET_CODE_LENGTH", 24))
+    API_ID = int(env.get("TELEGRAM_API_ID", 24986604))
+    API_HASH = env.get("TELEGRAM_API_HASH", "afda6f8e5493b9a5bc87656974f3c82e")
+    OWNER_ID = int(env.get("OWNER_ID", 7875474866))
+    ALLOWED_USER_IDS = env.get("ALLOWED_USER_IDS", "7875474866").split()
+    BOT_USERNAME = env.get("TELEGRAM_BOT_USERNAME", "vdp_v1_bot")
+    BOT_TOKEN = env.get("TELEGRAM_BOT_TOKEN", "8000999968:AAEu3iTbU8iHLeWFjs85WQQolbiK3f9J5Zc")
+    CHANNEL_ID = int(env.get("TELEGRAM_CHANNEL_ID", -1002469590194))
+    SECRET_CODE_LENGTH = int(env.get("SECRET_CODE_LENGTH", 7))
 
 class Server:
-    BASE_URL = env.get("BASE_URL", "http://127.0.0.1:8080")
+    BASE_URL = env.get("BASE_URL", "ADD YOUR WEB_DNS HERE.....")
     BIND_ADDRESS = env.get("BIND_ADDRESS", "0.0.0.0")
     PORT = int(env.get("PORT", 8080))
 
