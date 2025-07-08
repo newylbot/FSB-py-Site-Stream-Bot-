@@ -30,8 +30,29 @@ async def handle_user_file(_, msg: Message):
 
     if (msg.document and 'video' in msg.document.mime_type) or msg.video:
         stream_link = f'{Server.BASE_URL}/stream/{file_id}?code={secret_code}'
+
+        # ✅ Use caption as filename if available
+        if msg.caption:
+            file_name = msg.caption
+        elif msg.document:
+            file_name = msg.document.file_name
+        elif msg.video:
+            file_name = msg.video.file_name or f"video_{file_id}.mp4"
+        else:
+            file_name = f"file_{file_id}"
+
+        reply_text = f"""**📁 {file_name}**  
+───────────────  
+🔽 Download:  
+`{dl_link}`  
+───────────────  
+📺 Stream:  
+`{stream_link}`
+───────────────
+"""
+
         await msg.reply(
-            text=MediaLinksText % {'dl_link': dl_link, 'stream_link': stream_link},
+            text=reply_text,
             quote=True,
             reply_markup=InlineKeyboardMarkup(
                 [
