@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-Frame-Options" content="deny" />
-    <title>ʟᴜᴍɪɴᴏ ⇗ ˣᵖ</title>
+    <title>{{ fileName }} - ʟᴜᴍɪɴᴏ ⇗ ˣᵖ</title>
 
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Orbitron:wght@500&display=swap" rel="stylesheet">
@@ -71,6 +71,13 @@
       .nav-buttons a:hover {
         filter: brightness(1.1);
         transform: translateY(-2px);
+      }
+
+      .file-name {
+        margin: 0.5rem 0;
+        font-size: 1rem;
+        text-align: center;
+        font-weight: 600;
       }
 
       main {
@@ -194,6 +201,7 @@
     </div>
 
     <main>
+      <h2 class="file-name">{{ fileName }}</h2>
       <div class="video-container">
         <video id="stream-media" controls autoplay muted controlsList="nodownload" preload="auto">
           <source src="{{ mediaLink }}" type="video/mp4">
