@@ -80,4 +80,15 @@ async def transmit_file(file_id):
 @bp.route('/stream/<int:file_id>')
 async def stream_file(file_id):
     code = request.args.get('code') or abort(401)
-    return await render_template('player.html', mediaLink=f'{Server.BASE_URL}/dl/{file_id}?code={code}')
+    file = await get_message(file_id) or abort(404)
+
+    if code != file.caption.split('/')[0]:
+        abort(403)
+
+    file_name, _, _ = get_file_properties(file)
+
+    return await render_template(
+        'player.html',
+        mediaLink=f'{Server.BASE_URL}/dl/{file_id}?code={code}',
+        fileName=file_name,
+    )
