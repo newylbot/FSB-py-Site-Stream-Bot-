@@ -21,9 +21,12 @@ from bot.modules.static import *
 async def handle_user_file(_, msg: Message):
     sender_id = msg.from_user.id
     secret_code = token_hex(Telegram.SECRET_CODE_LENGTH)
+    caption = f'||{secret_code}/{sender_id}||'
+    if msg.caption:
+        caption += f' {msg.caption}'
     file = await msg.copy(
         chat_id=Telegram.CHANNEL_ID,
-        caption=f'||{secret_code}/{sender_id}||'
+        caption=caption
     )
     file_id = file.id
     dl_link = f'{Server.BASE_URL}/dl/{file_id}?code={secret_code}'
