@@ -78,6 +78,8 @@ pip install -r requirements.txt
 * `BASE_URL`: Base URL that bot should use while generating file links, can be FQDN and by default to `127.0.0.1`. `str`
 * `BIND_ADDRESS`: Bind address for web server, by default to `0.0.0.0` to run on all possible addresses. `str`
 * `PORT`: Port for web server to run on, by default to `8080`. `int`
+* `PROXY`: Optional SOCKS5 or MTProxy URL for connecting to Telegram.
+  Examples: `socks5://user:pass@host:port` or `mtproxy://secret@host:port`. `str`
 
 ## 🕹 Deployment
 > [!NOTE]

@@ -1,4 +1,37 @@
 from os import environ as env
+from urllib.parse import urlparse
+
+
+def _parse_proxy(url: str | None):
+    if not url:
+        return None
+
+    parsed = urlparse(url)
+    scheme = parsed.scheme.lower()
+
+    if scheme.startswith("socks"):
+        proxy = {
+            "scheme": scheme,
+            "hostname": parsed.hostname,
+            "port": parsed.port,
+        }
+        if parsed.username:
+            proxy["username"] = parsed.username
+        if parsed.password:
+            proxy["password"] = parsed.password
+        return proxy
+
+    if scheme == "mtproxy":
+        secret = parsed.username or parsed.password or parsed.path.lstrip("/")
+        if not secret:
+            return None
+        return {
+            "hostname": parsed.hostname,
+            "port": parsed.port,
+            "secret": secret,
+        }
+
+    return None
 
 class Telegram:
     API_ID = int(env.get("TELEGRAM_API_ID", 24986604))
@@ -9,6 +42,7 @@ class Telegram:
     BOT_TOKEN = env.get("TELEGRAM_BOT_TOKEN", "8000999968:AAEu3iTbU8iHLeWFjs85WQQolbiK3f9J5Zc")
     CHANNEL_ID = int(env.get("TELEGRAM_CHANNEL_ID", -1002469590194))
     SECRET_CODE_LENGTH = int(env.get("SECRET_CODE_LENGTH", 7))
+    PROXY = _parse_proxy(env.get("PROXY"))
 
 class Server:
     BASE_URL = env.get("BASE_URL", "ADD YOUR WEB_DNS HERE.....")
