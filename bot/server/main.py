@@ -1,12 +1,41 @@
 from quart import Blueprint, Response, request, render_template, redirect
 from math import ceil
 from re import match as re_match
+from typing import Optional
 from .error import abort
 from bot import TelegramBot
 from bot.config import Telegram, Server
 from bot.modules.telegram import get_message, get_file_properties
 
 bp = Blueprint('main', __name__)
+
+
+def _extract_caption(raw_caption: Optional[str], code: str) -> Optional[str]:
+    """Return caption text without the secret code section."""
+    if not raw_caption:
+        return None
+
+    text = raw_caption.strip()
+
+    # handle Telegram spoiler formatting
+    if text.startswith("||") and "||" in text[2:]:
+        inner, _, remainder = text[2:].partition("||")
+        text = remainder.strip()
+        # inner may contain code/user_id - ignore
+    elif text.startswith("`") and "`" in text[1:]:
+        inner, _, remainder = text[1:].partition("`")
+        text = remainder.strip()
+
+    if text.startswith(code):
+        # remove code and possible user id
+        rest = text[len(code):].lstrip()
+        if rest.startswith('/'):
+            rest = rest.split(' ', 1)
+            text = rest[1] if len(rest) > 1 else ''
+        else:
+            text = rest
+
+    return text or None
 
 @bp.route('/')
 async def home():
@@ -80,4 +109,17 @@ async def transmit_file(file_id):
 @bp.route('/stream/<int:file_id>')
 async def stream_file(file_id):
     code = request.args.get('code') or abort(401)
-    return await render_template('player.html', mediaLink=f'{Server.BASE_URL}/dl/{file_id}?code={code}')
+    file = await get_message(file_id) or abort(404)
+
+    if code != file.caption.split('/')[0]:
+        abort(403)
+
+    file_name, _, _ = get_file_properties(file)
+    caption = _extract_caption(file.caption, code)
+    display_name = caption or file_name
+
+    return await render_template(
+        'player.html',
+        mediaLink=f'{Server.BASE_URL}/dl/{file_id}?code={code}',
+        fileName=display_name,
+    )
