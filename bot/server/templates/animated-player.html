@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-Frame-Options" content="deny" />
+    <title>ʟᴜᴍɪɴᴏ ⇗ ˣᵖ - {{ fileName }}</title>
+
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <style>
+        :root {
+            --bg-main: #121212;
+            --nav-bg: rgba(14, 18, 32, 0.9);
+            --accent: #00c0ff;
+            --text: #e0f7ff;
+            --warn: #ff4c4c;
+            --card: #111827;
+            --shadow-light: rgba(0, 192, 255, 0.2);
+            --shadow-dark: rgba(0, 192, 255, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--nav-bg);
+            padding: 1rem 1.2rem;
+            box-shadow: 0 4px 15px var(--shadow-light);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--accent);
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .logo::before {
+            content: "\26A1 ";
+            font-size: 2rem;
+            margin-right: 8px;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .file-name {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: var(--text);
+            text-align: center;
+            margin-top: 6rem;
+            opacity: 0;
+            animation: slideIn 1s ease-in-out forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            gap: 1.5rem;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16 / 9;
+            background: #000;
+            border: 2px solid var(--accent);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 25px var(--shadow-dark);
+            transform: scale(0.98);
+            animation: popIn 0.8s ease-in-out;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .watermark {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 8px;
+            pointer-events: none;
+            transition: transform 0.3s ease;
+        }
+
+        .watermark:hover {
+            transform: scale(1.1);
+        }
+
+        .unmute-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0;
+            animation: fadeOut 3s ease 2s forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-top: 0.4rem;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        .nav-buttons a {
+            background: rgba(0, 192, 255, 0.3);
+            color: var(--accent);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 1rem;
+            border: 1px solid var(--accent);
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+
+        .nav-buttons a:hover {
+            background: var(--accent);
+            color: #000;
+            transform: translateY(-5px);
+        }
+
+        .disclaimer {
+            background-color: rgba(255, 255, 255, 0.05);
+            margin: 0.5rem auto;
+            padding: 1rem 1.5rem;
+            max-width: 800px;
+            font-size: 0.9rem;
+            color: #ccc;
+            text-align: center;
+            border-left: 4px solid var(--warn);
+            border-radius: 10px;
+            line-height: 1.5;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        footer {
+            background-color: #0e1220;
+            padding: 1rem;
+            font-size: 0.85rem;
+            color: #aaa;
+            text-align: center;
+            border-top: 1px solid #1c2233;
+            width: 100%;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                justify-content: center;
+                padding: 1.2rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .file-name {
+                margin-top: 5rem;
+                font-size: 1.4rem;
+            }
+
+            main {
+                gap: 1rem;
+            }
+
+            .video-container {
+                max-width: 800px;
+            }
+
+            .nav-buttons {
+                gap: 1rem;
+            }
+
+            .nav-buttons a {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .disclaimer {
+                font-size: 0.85rem;
+                padding: 0.8rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body oncontextmenu="return false">
+    <div id="dev-alert" class="dev-alert" style="display: none;">
+        🚫 What you're looking for is not meant to be accessed.<br />
+        Please respect the content privacy and avoid tampering.
+    </div>
+
+    <header>
+        <a href="#" class="logo">๏ ʟᴜᴍɪɴᴏ ⇗ ˣᵖ Stream Server</a>
+    </header>
+
+    <main>
+        <h2 class="file-name">{{ fileName }}</h2>
+        <div class="video-container">
+            <video id="stream-media" controls autoplay muted controlsList="nodownload" preload="auto">
+                <source src="{{ mediaLink }}" type="video/mp4">
+                <p>Your browser does not support the video tag.</p>
+            </video>
+            <div class="unmute-overlay">🔊 Tap to unmute</div>
+            <div class="watermark">๏ ʟᴜᴍɪɴᴏ ⇗ ˣᵖ</div>
+        </div>
+
+        <div class="disclaimer">
+            <strong>Disclaimer:</strong> Inspecting or tampering with this page's elements is strictly prohibited.
+            Please respect the platform's security guidelines.<br>
+            <br>Need Help⁉️ Contact on Support🗣️
+        </div>
+
+        <div class="nav-buttons">
+            <a href="https://t.me/luminoxpp" target="_blank">Join Channel</a>
+            <a href="https://t.me/lumino_contact_Bot" target="_blank">Contact Admin</a>
+        </div>
+    </main>
+
+    <div class="disclaimer">
+        <strong>Disclaimer:</strong> This platform does not host or store any content. All files are streamed via secure
+        tokenized URLs provided by users or third-party services. Viewing is for personal use only. Any attempt to
+        download, duplicate, screen-record, inspect elements, or reverse-engineer the media is strictly prohibited.
+    </div>
+
+    <footer>
+        &copy; <script>document.write(new Date().getFullYear())</script> ʟᴜᴍɪɴᴏ ⇗ ˣᵖ — All Rights Reserved.
+    </footer>
+
+    <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+    <script>
+        const player = new Plyr('#stream-media', {
+            controls: [
+                'play-large', 'rewind', 'play', 'fast-forward',
+                'progress', 'current-time', 'mute', 'volume',
+                'settings', 'fullscreen'
+            ],
+            settings: ['speed', 'loop'],
+            speed: { selected: 1, options: [0.5, 1, 1.5, 2] },
+            seekTime: 10,
+            keyboard: { focused: true, global: true },
+        });
+
+        player.on('enterfullscreen', () => {
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('landscape').catch(() => { });
+            }
+        });
+
+        player.on('exitfullscreen', () => {
+            if (screen.orientation && screen.orientation.unlock) {
+                screen.orientation.unlock();
+            }
+        });
+
+        const showDevWarning = () => {
+            document.body.innerHTML = '';
+            document.body.appendChild(document.getElementById('dev-alert'));
+            document.getElementById('dev-alert').style.display = 'flex';
+        };
+
+        document.addEventListener('keydown', function (e) {
+            if (
+                e.key === 'F12' ||
+                e.key === 'F10' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J')) ||
+                (e.ctrlKey && (e.key === 'u' || e.key === 's'))
+            ) {
+                e.preventDefault();
+                showDevWarning();
+            }
+        });
+
+        document.addEventListener("contextmenu", function (e) {
+            e.preventDefault();
+        });
+
+        setInterval(() => {
+            const start = performance.now();
+            debugger;
+            if (performance.now() - start > 50) {
+                document.body.innerHTML = "<h1 style='color:red;text-align:center;padding:100px;'>Access Denied: Developer Tools are Disabled for This Page. Please respect the content's security and privacy policies.</h1>";
+            }
+        }, 1000);
+
+        document.addEventListener('keyup', function (e) {
+            if (e.key === 'PrintScreen') {
+                alert("Screenshot blocked for security reasons.");
+                navigator.clipboard.writeText('');
+            }
+        });
+
+        console.log = () => { };
+        console.warn = () => { };
+        console.error = () => { };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const videos = document.querySelectorAll('video');
+            videos.forEach(v => {
+                v.disablePictureInPicture = true;
+                v.addEventListener('enterpictureinpicture', e => {
+                    e.preventDefault();
+                    document.exitPictureInPicture();
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
