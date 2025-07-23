@@ -45,7 +45,7 @@ class Telegram:
         PROXY = _parse_proxy(env.get("PROXY"))
 
 class Server:
-    BASE_URL = env.get("BASE_URL", "https://8080-newylbot-fsbpysitestrea-5iup96pue9t.ws-us120.gitpod.io")
+    BASE_URL = env.get("BASE_URL", "http://")
     BIND_ADDRESS = env.get("BIND_ADDRESS", "0.0.0.0")
     PORT = int(env.get("PORT", 8080))
 
