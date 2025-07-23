@@ -5,7 +5,11 @@ from typing import Optional
 from .error import abort
 from bot import TelegramBot
 from bot.config import Telegram, Server
-from bot.modules.telegram import get_message, get_file_properties
+from bot.modules.telegram import (
+    get_message,
+    get_file_properties,
+    parse_caption_meta,
+)
 
 bp = Blueprint('main', __name__)
 
@@ -47,7 +51,9 @@ async def transmit_file(file_id):
     code = request.args.get('code') or abort(401)
     range_header = request.headers.get('Range')
 
-    if code != file.caption.split('/')[0]:
+    # caption format: "||<secret_code>/<user_id>|| <optional_caption>"
+    stored_code, _ = parse_caption_meta(file.caption)
+    if code != stored_code:
         abort(403)
 
     file_name, file_size, mime_type = get_file_properties(file)
@@ -111,7 +117,8 @@ async def stream_file(file_id):
     code = request.args.get('code') or abort(401)
     file = await get_message(file_id) or abort(404)
 
-    if code != file.caption.split('/')[0]:
+    stored_code, _ = parse_caption_meta(file.caption)
+    if code != stored_code:
         abort(403)
 
     file_name, _, _ = get_file_properties(file)
