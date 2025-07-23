@@ -15,6 +15,26 @@ class Server:
     BIND_ADDRESS = env.get("BIND_ADDRESS", "0.0.0.0")
     PORT = int(env.get("PORT", 8080))
 
+    PROXY_TYPE = env.get("PROXY_TYPE")
+    PROXY_HOST = env.get("PROXY_HOST")
+    PROXY_PORT = env.get("PROXY_PORT")
+    PROXY_USERNAME = env.get("PROXY_USERNAME")
+    PROXY_PASSWORD = env.get("PROXY_PASSWORD")
+
+    if PROXY_TYPE and PROXY_HOST and PROXY_PORT:
+        PROXY = {
+            'scheme': PROXY_TYPE,
+            'hostname': PROXY_HOST,
+            'port': int(PROXY_PORT),
+        }
+
+        if PROXY_USERNAME:
+            PROXY['username'] = PROXY_USERNAME
+        if PROXY_PASSWORD:
+            PROXY['password'] = PROXY_PASSWORD
+    else:
+        PROXY = None
+
 # LOGGING CONFIGURATION
 LOGGER_CONFIG_JSON = {
     'version': 1,
